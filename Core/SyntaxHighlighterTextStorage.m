@@ -7,6 +7,7 @@
 //
 
 #import "SyntaxHighlighterTextStorage.h"
+#import "SATETheme.h"
 
 @interface SyntaxHighlighterTextStorage (Private)
 - (NSArray *)keywordsForCurrentLanguage;
@@ -16,20 +17,13 @@
 
 #if defined(GNUSTEP) && !__has_feature(objc_arc)
 @synthesize language = _language;
+@synthesize theme = _theme;
 #endif
-
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        _backing = [[NSMutableAttributedString alloc] init];
-        _language = SATELanguageNone;
-    }
-    return self;
-}
 
 #if defined(GNUSTEP) && !__has_feature(objc_arc)
 - (void)dealloc {
     [_backing release];
+    [_theme release];
     [super dealloc];
 }
 #endif
@@ -104,17 +98,18 @@
     range.length = end - range.location;
 
     NSFont *baseFont = [NSFont userFixedPitchFontOfSize:12];
+    NSColor *fgColor = _theme ? [_theme foregroundColor] : [NSColor blackColor];
     NSDictionary *baseAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
         baseFont, NSFontAttributeName,
-        [NSColor blackColor], NSForegroundColorAttributeName,
+        fgColor, NSForegroundColorAttributeName,
         nil];
     [self addAttributes:baseAttrs range:range];
 
-    NSColor *commentColor = [NSColor colorWithCalibratedRed:0.0 green:0.5 blue:0.0 alpha:1.0];
-    NSColor *stringColor = [NSColor colorWithCalibratedRed:0.8 green:0.0 blue:0.0 alpha:1.0];
-    NSColor *keywordColor = [NSColor colorWithCalibratedRed:0.0 green:0.0 blue:0.8 alpha:1.0];
-    NSColor *numberColor = [NSColor colorWithCalibratedRed:0.2 green:0.2 blue:0.6 alpha:1.0];
-    NSColor *preprocessorColor = [NSColor colorWithCalibratedRed:0.5 green:0.3 blue:0.0 alpha:1.0];
+    NSColor *commentColor = _theme ? [_theme commentColor] : [NSColor colorWithCalibratedRed:0.0 green:0.5 blue:0.0 alpha:1.0];
+    NSColor *stringColor = _theme ? [_theme stringColor] : [NSColor colorWithCalibratedRed:0.8 green:0.0 blue:0.0 alpha:1.0];
+    NSColor *keywordColor = _theme ? [_theme keywordColor] : [NSColor colorWithCalibratedRed:0.0 green:0.0 blue:0.8 alpha:1.0];
+    NSColor *numberColor = _theme ? [_theme numberColor] : [NSColor colorWithCalibratedRed:0.2 green:0.2 blue:0.6 alpha:1.0];
+    NSColor *preprocessorColor = _theme ? [_theme preprocessorColor] : [NSColor colorWithCalibratedRed:0.5 green:0.3 blue:0.0 alpha:1.0];
 
     /* Block comments first so they take precedence over line comments */
     NSRegularExpression *blockComment = [NSRegularExpression regularExpressionWithPattern:@"(/\\*[\\s\\S]*?\\*/)" options:NSRegularExpressionDotMatchesLineSeparators error:NULL];

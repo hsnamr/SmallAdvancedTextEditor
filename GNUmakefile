@@ -14,13 +14,19 @@ APP_NAME = SmallAdvancedTextEditor
 SmallAdvancedTextEditor_OBJC_FILES = \
 	main.m \
 	App/TEAppDelegate.m \
+	Core/SATETheme.m \
+	Core/SATEThemeManager.m \
 	Core/SyntaxHighlighterTextStorage.m \
-	UI/TEMainWindow.m
+	UI/TEMainWindow.m \
+	UI/TEThemePanel.m
 
 SmallAdvancedTextEditor_HEADER_FILES = \
 	App/TEAppDelegate.h \
+	Core/SATETheme.h \
+	Core/SATEThemeManager.h \
 	Core/SyntaxHighlighterTextStorage.h \
-	UI/TEMainWindow.h
+	UI/TEMainWindow.h \
+	UI/TEThemePanel.h
 
 SmallAdvancedTextEditor_INCLUDE_DIRS = \
 	-I. \

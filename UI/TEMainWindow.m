@@ -5,6 +5,8 @@
 
 #import "TEMainWindow.h"
 #import "SyntaxHighlighterTextStorage.h"
+#import "SATEThemeManager.h"
+#import "SATETheme.h"
 #import "SSWindowStyle.h"
 #import "SSFileDialog.h"
 
@@ -104,6 +106,12 @@
                                              selector:@selector(textDidChange:)
                                                  name:NSTextDidChangeNotification
                                                object:_textView];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(themeDidChange:)
+                                                 name:SATEThemeDidChangeNotification
+                                               object:[SATEThemeManager sharedManager]];
+
+    [self applyCurrentTheme];
 
     [_scrollView setDocumentView:_textView];
     [content addSubview:_scrollView];
@@ -117,6 +125,27 @@
     (void)note;
     _dirty = YES;
     [self updateTitle];
+}
+
+- (void)themeDidChange:(NSNotification *)note {
+    (void)note;
+    [self applyCurrentTheme];
+}
+
+- (void)applyCurrentTheme {
+    SATETheme *theme = [[SATEThemeManager sharedManager] currentTheme];
+    if (theme && [_textView respondsToSelector:@selector(setBackgroundColor:)]) {
+        [_textView setBackgroundColor:[theme backgroundColor]];
+        [_textView setDrawsBackground:YES];
+    }
+    SyntaxHighlighterTextStorage *hl = [self highlighterStorage];
+    if (hl) {
+        [hl setTheme:theme];
+        NSUInteger len = [[hl string] length];
+        if (len > 0) {
+            [hl applyHighlightingToRange:NSMakeRange(0, len)];
+        }
+    }
 }
 
 - (void)updateTitle {

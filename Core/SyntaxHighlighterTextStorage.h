@@ -10,6 +10,8 @@
 
 #import <AppKit/AppKit.h>
 
+@class SATETheme;
+
 typedef NS_ENUM(NSInteger, SATELanguage) {
     SATELanguageNone = 0,
     SATELanguageC,
@@ -37,10 +39,17 @@ typedef NS_ENUM(NSInteger, SATELanguage) {
 {
     NSMutableAttributedString *_backing;
     SATELanguage _language;
+    SATETheme *_theme;
 }
 #endif
 
 @property (nonatomic, assign) SATELanguage language;
+/// When set, syntax colors are taken from the theme; otherwise default colors are used.
+#if defined(GNUSTEP) && !__has_feature(objc_arc)
+@property (nonatomic, retain) SATETheme *theme;
+#else
+@property (nonatomic, strong) SATETheme *theme;
+#endif
 
 /// Infer language from file extension (e.g. @"file.py" -> SATELanguagePython).
 + (SATELanguage)languageFromFilename:(NSString *)filename;
