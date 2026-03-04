@@ -1,0 +1,11 @@
+# GNUstep build artifacts
+*.o
+*.d
+obj/
+*.app
+
+# IDE
+.DS_Store
+*.swp
+*.swo
+*~
