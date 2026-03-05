@@ -36,3 +36,6 @@ Highlighting uses fixed-width font, with colors for keywords, strings, comments,
 
 - **Built-in:** Dark, High Contrast, Sepia, Classic.  
 - **Customize…** opens a panel where you can: **Apply** the selected theme, **Duplicate** (copy a theme to customize), **Delete** (custom themes only), **New from current** (save the current theme as a new custom theme). Custom themes are stored in Application Support and persist across launches.
+
+## License
+GNU Affero General Public License v3.0
